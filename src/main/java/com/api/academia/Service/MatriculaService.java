@@ -1,7 +1,12 @@
 package com.api.academia.Service;
 
+import com.api.academia.DTO.request.MatriculaRequestDTO;
+import com.api.academia.Mapper.MatriculaMapper;
+import com.api.academia.Model.AulaModel;
 import com.api.academia.Model.MatriculaModel;
+import com.api.academia.Repository.AulaRepository;
 import com.api.academia.Repository.MatriculaRepository;
+import com.api.academia.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,6 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MatriculaService {
     private final MatriculaRepository matriculaRepository;
+    private final MatriculaMapper matriculaMapper;
+    private final AulaRepository aulaRepository;
 
     public List<MatriculaModel> findAll() {
         return matriculaRepository.findAll();
@@ -23,7 +30,13 @@ public class MatriculaService {
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NO_CONTENT,"Matrícula não encontrada."));
     }
 
-    public MatriculaModel save(MatriculaModel matriculaModel) {
+    public MatriculaModel save(MatriculaRequestDTO matriculaRequestDTO) {
+        MatriculaModel matriculaModel = matriculaMapper.toModel(matriculaRequestDTO);
+        AulaModel aulaModel = aulaRepository.findById(matriculaRequestDTO.aulaId())
+                .orElseThrow(() -> new BadRequestException("Aula não encontrada com o id:"+ matriculaRequestDTO.aulaId()));
+
+        matriculaModel.setAulaModel(aulaModel);
+
         return matriculaRepository.save(matriculaModel);
     }
 

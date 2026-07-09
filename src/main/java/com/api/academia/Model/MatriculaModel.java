@@ -23,7 +23,4 @@ public class MatriculaModel {
     @ManyToOne
     @JoinColumn(name = "aula_id")
     private AulaModel aulaModel;
-
-
-
 }
