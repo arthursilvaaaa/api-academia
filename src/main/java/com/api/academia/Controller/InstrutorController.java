@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class InstrutorController {
     }
 
     @PostMapping
-    public ResponseEntity<InstrutorResponseDTO> save(@RequestBody InstrutorRequestDTO instrutorRequestDTO){
+    public ResponseEntity<InstrutorResponseDTO> save(@Valid @RequestBody InstrutorRequestDTO instrutorRequestDTO){
         InstrutorModel salvo = instrutorService.save(instrutorRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(instrutorMapper.toResponse(salvo));
     }

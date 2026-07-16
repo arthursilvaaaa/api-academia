@@ -3,7 +3,9 @@ package com.api.academia.Service;
 import com.api.academia.DTO.request.MatriculaRequestDTO;
 import com.api.academia.Mapper.MatriculaMapper;
 import com.api.academia.Model.AulaModel;
+import com.api.academia.Model.AlunoModel;
 import com.api.academia.Model.MatriculaModel;
+import com.api.academia.Repository.AlunoRepository;
 import com.api.academia.Repository.AulaRepository;
 import com.api.academia.Repository.MatriculaRepository;
 import com.api.academia.exception.BadRequestException;
@@ -19,6 +21,7 @@ import java.util.List;
 public class MatriculaService {
     private final MatriculaRepository matriculaRepository;
     private final MatriculaMapper matriculaMapper;
+    private final AlunoRepository alunoRepository;
     private final AulaRepository aulaRepository;
 
     public List<MatriculaModel> findAll() {
@@ -27,14 +30,17 @@ public class MatriculaService {
 
     public MatriculaModel findById(long id) {
         return matriculaRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NO_CONTENT,"Matrícula não encontrada."));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Matrícula não encontrada."));
     }
 
     public MatriculaModel save(MatriculaRequestDTO matriculaRequestDTO) {
         MatriculaModel matriculaModel = matriculaMapper.toModel(matriculaRequestDTO);
+        AlunoModel alunoModel = alunoRepository.findById(matriculaRequestDTO.alunoId())
+                .orElseThrow(() -> new BadRequestException("Aluno não encontrado com o id: " + matriculaRequestDTO.alunoId()));
         AulaModel aulaModel = aulaRepository.findById(matriculaRequestDTO.aulaId())
-                .orElseThrow(() -> new BadRequestException("Aula não encontrada com o id:"+ matriculaRequestDTO.aulaId()));
+                .orElseThrow(() -> new BadRequestException("Aula não encontrada com o id: " + matriculaRequestDTO.aulaId()));
 
+        matriculaModel.setAlunoModel(alunoModel);
         matriculaModel.setAulaModel(aulaModel);
 
         return matriculaRepository.save(matriculaModel);

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -35,7 +36,7 @@ public class AulaController {
     }
 
     @PostMapping
-    public ResponseEntity<AulaResponseDTO> save(@RequestBody AulaRequestDTO aulaRequestDTO){
+    public ResponseEntity<AulaResponseDTO> save(@Valid @RequestBody AulaRequestDTO aulaRequestDTO){
         AulaModel salvo = aulaService.save(aulaRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(aulaMapper.toResponse(salvo));
     }

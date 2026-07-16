@@ -1,0 +1,10 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: academia_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: academia
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"

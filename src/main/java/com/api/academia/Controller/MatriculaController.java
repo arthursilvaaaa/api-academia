@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -35,13 +36,13 @@ public class MatriculaController {
     }
 
     @PostMapping
-    public ResponseEntity<MatriculaResponseDTO> save(@RequestBody MatriculaRequestDTO matriculaRequestDTO){
+    public ResponseEntity<MatriculaResponseDTO> save(@Valid @RequestBody MatriculaRequestDTO matriculaRequestDTO){
         MatriculaModel salvo = matriculaService.save(matriculaRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(matriculaMapper.toResponse(salvo));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MatriculaModel> delete(@PathVariable long id){
+    public ResponseEntity<Void> delete(@PathVariable long id){
         matriculaService.delete(id);
         return ResponseEntity.noContent().build();
     }

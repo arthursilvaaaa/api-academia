@@ -1,5 +1,6 @@
 package com.api.academia.Service;
 
+import com.api.academia.Mapper.AlunoMapper;
 import com.api.academia.Model.AlunoModel;
 import com.api.academia.Repository.AlunoRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlunoService {
     private final AlunoRepository alunoRepository;
+    private final AlunoMapper alunoMapper;
 
-    public List<AlunoModel> listAll() {
+    public List<AlunoModel> findAll() {
         return alunoRepository.findAll();
     }
 
