@@ -10,5 +10,7 @@ import org.mapstruct.Mapping;
 public interface AulaMapper {
     @Mapping(target = "instrutorModel", ignore = true)
     AulaModel toModel(AulaRequestDTO dto);
+    @Mapping(target = "instrutorId", source = "instrutorModel.id")
+    @Mapping(target = "instrutorNome", source = "instrutorModel.nome")
     AulaResponseDTO toResponse(AulaModel aulaModel);
 }
